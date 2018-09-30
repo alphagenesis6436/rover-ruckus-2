@@ -7,8 +7,37 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Updated by Alex on 6/1/2017.
+ * Created by Alex on 6/1/2017.
+ * Updated by Alex on 9/30/2018
  */
+
+/**
+ * Notes about Hardware Devices
+ *  DCMotors
+ *      Power Range: [-1. 1]
+ *      AndyMark Neverest Motors
+ *          FORWARD direction follows the RIGHT HAND RULE
+ *             meaning, stick out your right thumb (motor axle) and curl hand in direction of fingers
+ *             (direction motor axle will spin)
+ *      Tetrix Motors
+ *          FORWARD direction follows the LEFT HAND RULE
+ *      Rev Motors
+ *          FORWARD direction is indicated on the motor!
+ *  Servos
+ *      Position Range: [0, 1]
+ *      180 Degree HiTechnic Servos
+ *          0 is fully clockwise
+ *          1 is fully clockwise
+ *          Most Servos we have are broken and cannot operate in the full range
+ *      360 Degree (Continuous) HiTechnic Servos
+ *          0 is max speed in clockwise direction
+ *          0.5 is speed = 0, servo stops
+ *          1 is max speed in counterclockwise direction
+ *      Rev Servos
+ *
+ *
+ */
+
 
 @TeleOp(name = "OpMode Template", group = "Default")
 @Disabled
