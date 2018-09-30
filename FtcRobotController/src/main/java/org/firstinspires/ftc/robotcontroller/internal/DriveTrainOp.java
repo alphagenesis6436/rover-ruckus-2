@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Updated by Alex on 6/1/2017.
+ * Updated by Ben on 9/29/2018.
  */
 
 @TeleOp(name = "DriveTrainOp", group = "Default")
@@ -22,6 +22,7 @@ public class DriveTrainOp extends OpMode {
     final double DRIVE_PWR_MAX = 0.80;
     double currentLeftPwr = 0.0;
     double currentRightPwr = 0.0;
+    DriveMode driveMode = DriveMode.TANKDRIVE;
     boolean tankDriveOn = true;
     boolean arcadeDriveOn = !tankDriveOn;
 
@@ -103,10 +104,12 @@ public class DriveTrainOp extends OpMode {
     //step 1: Press left/right bumper to select tank/arcade drive
     void updateDriveTrain() {
         if (gamepad1.left_bumper){
+            driveMode = DriveMode.TANKDRIVE;
             tankDriveOn = true;
             arcadeDriveOn = false;
         }
         else if (gamepad1.right_bumper){
+            driveMode = DriveMode.ARCADEDRIVE;
             arcadeDriveOn = true;
             tankDriveOn = false;
         }
@@ -116,6 +119,12 @@ public class DriveTrainOp extends OpMode {
         }
         if (arcadeDriveOn) {
             updateArcadeDrive();
+        }
+        switch (driveMode) {
+            case TANKDRIVE: updateTankDrive();
+                break;
+            case ARCADEDRIVE: updateArcadeDrive();
+                break;
         }
     }
 
@@ -141,4 +150,9 @@ public class DriveTrainOp extends OpMode {
     //used to measure the amount of time passed since a new step in autonomous has started
     boolean waitSec(double elapsedTime) { return (this.time - setTime >= elapsedTime); }
 
+}
+
+//This enum allows us to switch between Drive Modes more elegantly than using boolean variables
+enum DriveMode {
+    TANKDRIVE, ARCADEDRIVE;
 }
