@@ -17,7 +17,7 @@ public class RangerOp extends OpMode {
     DcMotor rightDrive;
 
     //Declare any variables & constants pertaining to drive train
-    final double DRIVE_PWR_MAX = 0.80;
+    final double DRIVE_PWR_MAX = 0.40;
     double currentLeftPwr = 0.0;
     double currentRightPwr = 0.0;
 

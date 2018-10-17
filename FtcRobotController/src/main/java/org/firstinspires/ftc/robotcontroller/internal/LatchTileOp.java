@@ -7,25 +7,27 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by Ben on 9/29/2018.
+ * Created by Sabrina on 10/13/2018.
  */
 
-@TeleOp(name = "DriveTrainOp", group = "Default")
+@TeleOp(name = "LatchTileOp", group = "Default")
 //@Disabled
-public class DriveTrainOp extends OpMode {
+public class LatchTileOp extends OpMode {
     //Declare any motors
     DcMotor FL; //left if forward
     DcMotor FR;
     DcMotor BL;
     DcMotor BR;
+    DcMotor LA;
     //Declare any variables & constants pertaining to drive train
     final double DRIVE_PWR_MAX = 0.80;
     double currentLeftPwr = 0.0;
     double currentRightPwr = 0.0;
+    final double LATCH_PWR = 0.80;
+    double currentLatchPwr = 0.0;
     DriveMode driveMode = DriveMode.TANKDRIVE;
-    MineralColor mineralColor = MineralColor.NOTHING;
 
-    public DriveTrainOp() {}
+    public LatchTileOp() {}
 
     @Override public void init() {
         //Initialize motors & set direction
@@ -39,6 +41,8 @@ public class DriveTrainOp extends OpMode {
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         BR = hardwareMap.dcMotor.get("br");
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        LA = hardwareMap.dcMotor.get("la");
+        LA.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry();
     }
@@ -57,33 +61,8 @@ public class DriveTrainOp extends OpMode {
     void updateData() {
         //Add in update methods for specific robot mechanisms
         updateDriveTrain();
+        updateLatch();
     }
-
-    void initialization() {
-        //Clip and Initialize Drive Train
-        currentLeftPwr = Range.clip(currentLeftPwr, -DRIVE_PWR_MAX, DRIVE_PWR_MAX);
-        FL.setPower(currentLeftPwr);
-        BL.setPower(currentLeftPwr);
-        currentRightPwr = Range.clip(currentRightPwr, -DRIVE_PWR_MAX, DRIVE_PWR_MAX);
-        FR.setPower(currentRightPwr);
-        BR.setPower(currentRightPwr);
-
-    }
-    void telemetry() {
-        //Show Data for Drive Train
-        telemetry.addData("Left Drive Pwr", FL.getPower());
-        telemetry.addData("Right Drive Pwr", BR.getPower());
-    }
-
-    //Create Methods that will update the driver data
-
- /*
-     All update methods should be commented with:
-         //Controlled by Driver (1 or 2)
-         //Step 1: (Physical Instructions on how to control specific robot mechanism using controller buttons)
-         //Step 2: (Physical Instructions on how to control specific robot mechanism using controller buttons)
-         //Step ...: (Physical Instructions on how to control specific robot mechanism using controller buttons)
-  */
 
     //Controlled by Driver 1
     //step 1: Push up/down the left/right stick to control the left/right drive motors
@@ -116,6 +95,48 @@ public class DriveTrainOp extends OpMode {
                 break;
         }
     }
+    void updateLatch() {
+        currentLatchPwr = 0.0;
+        if(gamepad1.dpad_up) {
+            currentLatchPwr = LATCH_PWR;
+        }
+        else if (gamepad1.dpad_down) {
+            currentLatchPwr = -LATCH_PWR;
+        }
+    }
+
+
+    void initialization() {
+        //Clip and Initialize Drive Train
+        currentLeftPwr = Range.clip(currentLeftPwr, -DRIVE_PWR_MAX, DRIVE_PWR_MAX);
+        FL.setPower(currentLeftPwr);
+        BL.setPower(currentLeftPwr);
+        currentRightPwr = Range.clip(currentRightPwr, -DRIVE_PWR_MAX, DRIVE_PWR_MAX);
+        FR.setPower(currentRightPwr);
+        BR.setPower(currentRightPwr);
+        currentLatchPwr = Range.clip(currentLatchPwr, -LATCH_PWR, LATCH_PWR);
+        LA.setPower(currentLatchPwr);
+
+    }
+    void telemetry() {
+        //Show Data for Drive Train
+        telemetry.addData("Left Drive Pwr", FL.getPower());
+        telemetry.addData("Right Drive Pwr", BR.getPower());
+        telemetry.addData("Latch Pwr", LA.getPower());
+
+    }
+
+    //Create Methods that will update the driver data
+
+ /*
+     All update methods should be commented with:
+         //Controlled by Driver (1 or 2)
+         //Step 1: (Physical Instructions on how to control specific robot mechanism using controller buttons)
+         //Step 2: (Physical Instructions on how to control specific robot mechanism using controller buttons)
+         //Step ...: (Physical Instructions on how to control specific robot mechanism using controller buttons)
+  */
+
+
 
 
     //Create variables/methods that will be used in ALL autonomous programs for this specific robot
@@ -139,12 +160,4 @@ public class DriveTrainOp extends OpMode {
     //used to measure the amount of time passed since a new step in autonomous has started
     boolean waitSec(double elapsedTime) { return (this.time - setTime >= elapsedTime); }
 
-}
-
-//This enum allows us to switch between Drive Modes more elegantly than using boolean variables
-enum DriveMode {
-    TANKDRIVE, ARCADEDRIVE;
-}
-enum MineralColor {
-    YELLOW, WHITE, NOTHING;
 }
