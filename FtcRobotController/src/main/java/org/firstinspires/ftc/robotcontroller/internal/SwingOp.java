@@ -63,7 +63,8 @@ public class SwingOp extends OpMode {
             case 1:
                 swingPow = MAX_POW;
                 swingPos = swingMotor.getCurrentPosition();
-                if (swingPos >= COUNTS_PER_REV * 0.8) {
+                if (swingPos >= COUNTS_PER_REV * 0.18
+                        ) {
                     swingState++;
                     setTime = this.time;
                 }
